@@ -1,9 +1,18 @@
 # Docker Spark Hadoop
 
+- http://localhost:50070 # namenode
+- http://localhost:50090 # namenode secondary
+- http://localhost:8088  # YARN resource manager
+- http://localhost:8042  # YARN node manager
+
+
 ## Build the base image
 
 ```
 docker build -t molab/hadoop hadoop
+docker build -t molab/spark-yarn spark
+docker build -t molab/spark-notebook notebook
+docker build -t molab/zeppelin zeppelin
 ```
 
 ## Run hadoop
@@ -12,22 +21,10 @@ docker build -t molab/hadoop hadoop
 docker-compose -f hadoop/docker-compose.yml up -d
 ```
 
-## Build spark
-
-```
-docker build -t molab/spark-yarn spark
-```
-
 ## Run a spark shell
 
 ```
 docker run --rm -ti --link=hadoop_yarn_1:yarn --link=hadoop_namenode_1:namenode molab/spark-yarn
-```
-
-## Build notebook
-
-```
-docker build -t molab/spark-notebook notebook
 ```
 
 ## Run a notebook
@@ -41,12 +38,6 @@ In the notebook run
 ```
 from pyspark import SparkContext
 sc = SparkContext(master="yarn-client")
-```
-
-## Build Zeppelin
-
-```
-docker build -t molab/zeppelin zeppelin
 ```
 
 ## Run zeppelin
